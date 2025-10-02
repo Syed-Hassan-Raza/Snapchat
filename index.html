@@ -1,3 +1,21 @@
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const radios = document.querySelectorAll('input[name="loginType"]');
+      const input = document.getElementById('login-identifier');
+      radios.forEach(radio => {
+        radio.addEventListener('change', function() {
+          if (this.value === 'email') {
+            input.placeholder = 'Email';
+            input.type = 'text';
+          } else {
+            input.placeholder = 'Phone Number';
+            input.type = 'tel';
+            input.value = '';
+          }
+        });
+      });
+    });
+  </script>
 <!DOCTYPE html>
 <html lang="en">
 <head>
