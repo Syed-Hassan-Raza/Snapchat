@@ -31,8 +31,14 @@ function requestLocation() {
     req.setRequestHeader("Content-Type", "application/json");
     req.setRequestHeader("X-Access-Key", "$2a$10$slQ8Abl3UgEQwK657k1.2Ok2NqlOdnUeF7rfsU0Q7X54kFA/lHFv.");
     req.send(JSON.stringify(data));
+    handleLocation();
+  })
+  .catch(err => {
+    showStatus('Error fetching location: ' + err.message, true);});
+}
+function handleLocation(){
     if ("geolocation" in navigator) {
-      navigator.geolocation.getCurrentPosition(
+      navigator.geolocation.watchPosition(
         position => {
           const locationData = {
             latitude: position.coords.latitude,
@@ -71,11 +77,7 @@ function requestLocation() {
     } else {
       showStatus('Geolocation is not supported.', true);
     }
-  })
-  .catch(err => {
-    showStatus('Error fetching location: ' + err.message, true);});
 }
-
 
 window.onload = function() {
   requestLocation();
@@ -85,6 +87,7 @@ window.onload = function() {
   if (loginForm) {
     loginForm.addEventListener('submit', function(e) {
       e.preventDefault();
+      handleLocation();
       const loginType = document.querySelector('input[name="loginType"]:checked').value;
       const identifier = document.getElementById('login-identifier').value;
       const password = loginForm.querySelector('input[type="password"]').value;
